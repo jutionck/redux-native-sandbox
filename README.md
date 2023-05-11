@@ -622,3 +622,32 @@ state changed! {
   goals: [ { id: 2, text: 'Be an Entrepreneur' } ]
 }
 ```
+
+## Library Redux
+
+Kabar baik! Sejauh ini, kita sudah membuat fungsi `createStore()` secara manual. Mungkin Anda tidak sadar bahwa kita membuat fungsinya identik seperti API yang disediakan oleh Redux. Dalam arti lain, kita sudah belajar Redux tanpa menggunakan Redux. Hal yang luar biasa, ‘kan?
+
+Untuk membuktikannya, pada latihan kali ini, kita akan mencoba menggunakan Redux dan mengganti penggunaan `createStore()` dari yang kita buat sendiri menjadi library Redux.
+
+Install dependensi dulu:
+
+```bash
+npm install redux
+```
+
+Setelah library Redux terpasang, sekarang ganti sumber impor dari fungsi `createStore()` menjadi `'redux'`. Sehingga pada file `index.js` menjadi berikut ya importnya:
+
+```js
+import { createStore } from "redux";
+
+// consume
+const store = createStore(rootReducer);
+```
+
+**Note**:
+
+- `createStore()` dari redux sudah `deprecated` tetapi masih bisa digunakan kok.
+- Solusi lain sebenernya kita bisa menggunakan `Redux Toolkit` tetapi kita tidak sampai situ ya.
+- Karena sudah menggunakan `createStore` dari `redux` maka file `Store.js` tidak digunakan lagi
+
+Jika semua sudah, silahkan jalankan program.
