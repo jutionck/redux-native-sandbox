@@ -10,8 +10,5 @@
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "type": "module",
-  "dependencies": {
-    "redux": "^4.2.1"
-  }
+  "type": "module"
 }

@@ -1,6 +1,6 @@
 # State Management Redux (Vanilla JS)
 
-## Awal
+# Awal
 
 Berbicara tentang state management adalah menjadi bahasan yang sangat krusial dan penting. Mengapa? karena dalam pengembangan sebuah aplikasi Front-End kewajiban kita harus paham apa apa, bagaiamana dan cara untuk melakukan manajeman state dalam aplikasi yang dibuat, karena aplikasi Front-End sebenernya terdiri dari sebuah **UI** dan **STATE** terkhusus untuk **React.JS**.
 
@@ -622,32 +622,3 @@ state changed! {
   goals: [ { id: 2, text: 'Be an Entrepreneur' } ]
 }
 ```
-
-## Redux Library
-
-abar baik! Sejauh ini, kita sudah membuat fungsi `createStore()` secara manual. Mungkin Anda tidak sadar bahwa kita membuat fungsinya identik seperti API yang disediakan oleh Redux. Dalam arti lain, kita sudah belajar Redux tanpa menggunakan Redux. Hal yang luar biasa, ‘kan?
-
-Untuk membuktikannya, pada latihan kali ini, kita akan mencoba menggunakan Redux dan mengganti penggunaan `createStore()` dari yang kita buat sendiri menjadi library Redux.
-
-Instalasi dependensi dulu:
-
-```bash
-npm install redux
-```
-
-Setelah library Redux terpasang, sekarang ganti sumber impor dari fungsi `createStore()` menjadi `'redux'`. Seperti berikut pada file `index.js`:
-
-```js
-import { createStore } from "redux";
-```
-
-**Note**:
-
-- `createStore` yang digunakan dari `redux` sudah `deprecated` tetapi masih bisa kita gunakan kok.
-- Solusinya sebenernya bisa menggunakan `Redux Toolkit` tapi kita gak belajar sampai situ dulu ya.
-
-Dengan begitu, fungsi `createStore()` sudah diambil dari library Redux.
-
-Simpan perubahan kode dan pastikan store masih bekerja dengan baik pada console.
-
-Jadi, karena kika sudah menggunakan libary `redux` maka file `Store.js` tidak diperlukan lagi ya.
