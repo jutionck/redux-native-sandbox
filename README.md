@@ -245,7 +245,7 @@ function todosReducer(todos = [], action = {}) {
     });
   }
 
-  if (action.type === "DELETE_TODO") {
+  if (action.type === "REMOVE_TODO") {
     return todos.filter(({ id }) => id !== action.payload.id);
   }
 
