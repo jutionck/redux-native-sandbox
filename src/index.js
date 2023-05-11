@@ -1,9 +1,10 @@
+import pkg from "@reduxjs/toolkit";
+const { configureStore } = pkg;
 import {
   addGoalActionCreator,
   deleteGoalActionCreator,
 } from "./Goal/GoalAction.js";
 import { rootReducer } from "./RootReducer.js";
-import { createStore } from "./Store.js";
 import {
   addTodoActionCreator,
   removeTodoActionCreator,
@@ -11,7 +12,9 @@ import {
 } from "./Todo/TodoAction.js";
 
 // consume
-const store = createStore(rootReducer);
+const store = configureStore({
+  reducer: rootReducer,
+});
 
 // getting the state
 store.getState();

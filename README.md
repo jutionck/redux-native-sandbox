@@ -651,3 +651,42 @@ const store = createStore(rootReducer);
 - Karena sudah menggunakan `createStore` dari `redux` maka file `Store.js` tidak digunakan lagi
 
 Jika semua sudah, silahkan jalankan program.
+
+## Redux Toolkit
+
+Redux Toolkit sebenarnya adalah sebuah paket (package) yang dibangun di atas Redux core. Dalam arti lain, Redux Toolkit tidak sepenuhnya berbeda dengan Redux core, melainkan menyediakan utilitas dan fitur tambahan untuk memudahkan penggunaan Redux.
+
+Beberapa perbedaan antara Redux Toolkit dan Redux core adalah:
+
+Redux Toolkit menyediakan konfigurasi default untuk membuat store Redux, sehingga pengguna tidak perlu lagi menuliskan boilerplate code yang banyak.
+Redux Toolkit menyediakan fitur createAction untuk mempermudah pembuatan action creator hanya dengan satu baris kode.
+Redux Toolkit menyediakan fitur createReducer untuk mempermudah pembuatan reducer dengan sintaks yang lebih mudah dipahami.
+Redux Toolkit menyediakan fitur createSlice yang memungkinkan pembuatan reducer dan action creator dalam satu file, serta otomatis menghasilkan action types dan action creators yang terkait.
+Dengan menggunakan Redux Toolkit, pengguna Redux dapat lebih efisien dalam membangun aplikasi dengan Redux, karena beberapa kode boilerplate telah disederhanakan oleh Redux Toolkit. Namun, pada dasarnya, Redux Toolkit masih mempergunakan konsep dan prinsip dasar Redux core, seperti store, action, reducer, dan middleware.
+
+Untuk menggunakanya instalasi dulu ya:
+
+```bash
+npm install @reduxjs/toolkit
+```
+
+Kemudian kita modifikasi sedikit pada file `index.js` menjadi berikut:
+
+```js
+import pkg from "@reduxjs/toolkit";
+const { configureStore } = pkg;
+```
+
+Penjelasan:
+
+- Untuk import kenapa demikian, karena kita menggunakan standar `type:"module"` dan harus ada akhiran `.js` nya pada import. Karena tidak memungkinkan, makanya caranya adalah di atas.
+
+Kemudian pada pemanggilan sebelumnya yang `createStore()` kita ubah menjadi `configureStore()` caranya adalah sebagai berikut:
+
+```js
+const store = configureStore({
+  reducer: rootReducer,
+});
+```
+
+Jalankan lagi aplikasi dan pastikan program berjalan dengan baik.
