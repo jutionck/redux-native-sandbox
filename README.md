@@ -658,10 +658,11 @@ Redux Toolkit sebenarnya adalah sebuah paket (package) yang dibangun di atas Red
 
 Beberapa perbedaan antara Redux Toolkit dan Redux core adalah:
 
-Redux Toolkit menyediakan konfigurasi default untuk membuat store Redux, sehingga pengguna tidak perlu lagi menuliskan boilerplate code yang banyak.
-Redux Toolkit menyediakan fitur createAction untuk mempermudah pembuatan action creator hanya dengan satu baris kode.
-Redux Toolkit menyediakan fitur createReducer untuk mempermudah pembuatan reducer dengan sintaks yang lebih mudah dipahami.
-Redux Toolkit menyediakan fitur createSlice yang memungkinkan pembuatan reducer dan action creator dalam satu file, serta otomatis menghasilkan action types dan action creators yang terkait.
+1. Redux Toolkit menyediakan konfigurasi default untuk membuat store Redux, sehingga pengguna tidak perlu lagi menuliskan boilerplate code yang banyak.
+2. Redux Toolkit menyediakan fitur createAction untuk mempermudah pembuatan action creator hanya dengan satu baris kode.
+3. Redux Toolkit menyediakan fitur createReducer untuk mempermudah pembuatan reducer dengan sintaks yang lebih mudah dipahami.
+4. Redux Toolkit menyediakan fitur createSlice yang memungkinkan pembuatan reducer dan action creator dalam satu file, serta otomatis menghasilkan action types dan action creators yang terkait.
+
 Dengan menggunakan Redux Toolkit, pengguna Redux dapat lebih efisien dalam membangun aplikasi dengan Redux, karena beberapa kode boilerplate telah disederhanakan oleh Redux Toolkit. Namun, pada dasarnya, Redux Toolkit masih mempergunakan konsep dan prinsip dasar Redux core, seperti store, action, reducer, dan middleware.
 
 Untuk menggunakanya instalasi dulu ya:
@@ -670,7 +671,57 @@ Untuk menggunakanya instalasi dulu ya:
 npm install @reduxjs/toolkit
 ```
 
-Kemudian kita modifikasi sedikit pada file `index.js` menjadi berikut:
+Sebelum lanjut sedikit perbedaan antara `redux` dan `@redux/toolkit`:
+
+```js
+// redux
+import { createStore } from "redux";
+
+const initialState = {
+  count: 0,
+};
+
+function reducer(state = initialState, action) {
+  switch (action.type) {
+    case "INCREMENT":
+      return { count: state.count + 1 };
+    case "DECREMENT":
+      return { count: state.count - 1 };
+    default:
+      return state;
+  }
+}
+
+const store = createStore(reducer);
+```
+
+```js
+// @redux/toolkit
+import { configureStore, createSlice } from "@reduxjs/toolkit";
+
+const counterSlice = createSlice({
+  name: "counter",
+  initialState: {
+    count: 0,
+  },
+  reducers: {
+    increment: (state) => {
+      state.count += 1;
+    },
+    decrement: (state) => {
+      state.count -= 1;
+    },
+  },
+});
+
+const store = configureStore({
+  reducer: counterSlice.reducer,
+});
+```
+
+Perbedaan yang cukup mencolok dapat dilihat pada contoh penggunaan Redux Toolkit, di mana pembuatan store menggunakan configureStore yang disediakan oleh Redux Toolkit, yang secara otomatis menyediakan beberapa fitur tambahan seperti devTools dan middleware. Selain itu, pada contoh Redux Toolkit, pembuatan reducer dilakukan menggunakan createSlice yang menyederhanakan pembuatan action creators dan reducer dalam satu file, serta otomatis menghasilkan action types dan action creators yang terkait. Hal ini tidak dimungkinkan pada contoh penggunaan Redux core, sehingga pengguna harus membuat action types dan action creators secara manual (_tetapi sebenernya jika sudah membuat `action` kita masih bisa menggunakanya_)
+
+Oke jika sudah Kemudian kita modifikasi sedikit pada file `index.js` menjadi berikut:
 
 ```js
 import pkg from "@reduxjs/toolkit";
