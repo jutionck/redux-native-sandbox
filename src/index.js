@@ -1,4 +1,8 @@
-import { addTodoActionCreator, removeTodoActionCreator } from "./Action.js";
+import {
+  addTodoActionCreator,
+  removeTodoActionCreator,
+  toggleTodoActionCreator,
+} from "./Action.js";
 import { createStore } from "./CreateStore.js";
 import { todosReducer } from "./Reducer.js";
 
@@ -9,7 +13,7 @@ const store = createStore(todosReducer);
 store.getState();
 
 // subscribe state changed
-const unsubscribe = store.subscribe(() => {
+store.subscribe(() => {
   console.log("state changed!", store.getState());
 });
 
@@ -37,5 +41,5 @@ store.dispatch(
 // menghapus todo dengan id 3
 store.dispatch(removeTodoActionCreator(3));
 
-// unsubscrive
-unsubscribe();
+// mengubah Learn React menjadi complete
+store.dispatch(toggleTodoActionCreator(1));

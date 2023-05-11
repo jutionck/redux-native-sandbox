@@ -14,7 +14,24 @@ Buka terminal lakukan npm init:
 npm init --y
 ```
 
-Kemudian tambahkan `type:"module"` pada `packge.json`. Setelah itu buat folder `src`.
+Kemudian tambahkan `type:"module"` dan buat script `start` pada `packge.json`. Setelah itu buat folder `src`. Detailnya sebagai berikut:
+
+```json
+{
+  "name": "redux-native-sandbox",
+  "version": "1.0.0",
+  "description": "# Awal",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node src/index.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "module"
+}
+```
 
 ## State Container (Store)
 
@@ -81,12 +98,9 @@ const store = createStore();
 store.getState();
 
 // subscribe state changed
-const unsubscribe = store.subscribe(() => {
-  console.log("state changed");
+store.subscribe(() => {
+  console.log("state changed!", store.getState());
 });
-
-// unsubscrive
-unsubscribe();
 ```
 
 ## Action
@@ -365,8 +379,8 @@ store.dispatch(
 // menghapus todo dengan id 3
 store.dispatch(removeTodoActionCreator(3));
 
-// unsubscrive
-unsubscribe();
+// mengubah Learn React menjadi complete
+store.dispatch(toggleTodoActionCreator(1));
 ```
 
 Jalankan pada `console`
