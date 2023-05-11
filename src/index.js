@@ -1,9 +1,9 @@
+import { createStore } from "redux";
 import {
   addGoalActionCreator,
   deleteGoalActionCreator,
 } from "./Goal/GoalAction.js";
 import { rootReducer } from "./RootReducer.js";
-import { createStore } from "./Store.js";
 import {
   addTodoActionCreator,
   removeTodoActionCreator,
