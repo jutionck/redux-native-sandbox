@@ -389,6 +389,236 @@ Jalankan pada `console`
 node src/index.js
 ```
 
-## Kesimpulan
+Langkah demi langkah sudah kita lalui untuk membangun fungsi `createStore()`, tetapi ketahuilah bahwa `createStore()` sebenarnya merupakan fungsi yang ada dalam library Redux. Kami sangat mengapresiasi usaha Anda yang sudah bertahan hingga tahap ini karena membuat dan memahami fungsi `createStore()` bukanlah hal yang mudah. Wajar bila Anda sulit dalam mengikutinya. Namun, dengan membuat fungsi tersebut dari awal, semoga Anda bisa memahami secara mendalam cara kerja store dalam mengelola state pada Redux.
 
-Langkah demi langkah sudah kita lalui untuk membangun fungsi createStore(), tetapi ketahuilah bahwa createStore() sebenarnya merupakan fungsi yang ada dalam library Redux. Kami sangat mengapresiasi usaha Anda yang sudah bertahan hingga tahap ini karena membuat dan memahami fungsi createStore() bukanlah hal yang mudah. Wajar bila Anda sulit dalam mengikutinya. Namun, dengan membuat fungsi tersebut dari awal, semoga Anda bisa memahami secara mendalam cara kerja store dalam mengelola state pada Redux.
+## Root Reducer (Multiple Reducer)
+
+Pada latihan sebelumnya, kita sudah berhasil membuat fungsi `createStore()`, tetapi store yang dihasilkan hanya mengelola satu state saja, yaitu todos. Nah, sekarang kita akan coba buat aplikasi lebih kompleks lagi dengan menambahkan state baru, yaitu goals (to-do jangka panjang).
+
+Dalam konsep store, setiap state harus memiliki fungsi reducer-nya masing-masing. Saat ini, kita sudah memiliki fungsi `todosReducer()` untuk state todos dan kita perlu membuat satu fungsi reducer baru, yakni goalsReducer() untuk state goals. Namun, masalahnya adalah fungsi `createStore()` yang kita buat hanya menerima satu reducer fungsi saja. Contohnya seperti ini.
+
+```js
+// createStore hanya menerima satu fungsi reducer sebagai argumen
+const store = createStore(todosReducer);
+```
+
+Kita tidak bisa memanggil fungsi `createStore()` dengan cara seperti ini.
+
+```js
+// cara ini tidak bisa dilakukan
+const store = createStore(todosReducer, goalsReducer);
+```
+
+Oke. Kita dapat masalah baru, bagaimana cara menyelesaikannya? Sebelum menjawab kita akan memodifikasi project yang sudah dibuat sebelumnya. Pertama kita akan pisahkan antara `todo` dan `goal` maka dari itu struktur projectnya menjadi berikut:
+
+```bash
+src/
+  Todo/
+    - TodoAction.js
+    - TodoReducer.js
+  Goal/
+    - GoalAction.js
+    - GoalReducer.js
+  index.js
+  Store.js
+package.json
+README.md
+```
+
+Berikutnya buat 2 buah file baru di dalam folder `Goal` dengan nama `GoalAction.js` dan `GoalReducer.js` berikut kodenya:
+
+```js
+// GoalAction
+function addGoalActionCreator({ id, text }) {
+  return {
+    type: "ADD_GOAL",
+    payload: {
+      id,
+      text,
+    },
+  };
+}
+
+function deleteGoalActionCreator(id) {
+  return {
+    type: "DELETE_GOAL",
+    payload: {
+      id,
+    },
+  };
+}
+
+export { addGoalActionCreator, deleteGoalActionCreator };
+```
+
+```js
+// GoalReducer
+function goalsReducer(goals = [], action = {}) {
+  if (action.type === "ADD_GOAL") {
+    return [...goals, action.payload];
+  }
+
+  if (action.type === "DELETE_GOAL") {
+    return goals.filter((goal) => goal.id !== action.payload.id);
+  }
+
+  return goals;
+}
+
+export { goalsReducer };
+```
+
+Berikutnya bagaimana cara menggabungkan beberapa reducer ? Beirkut simulasi gambarnya:
+![Root Reducer](https://dicoding-web-img.sgp1.cdn.digitaloceanspaces.com/original/academy/dos:d92a238c0174694d51b2338a829ac43820221110074219.png)
+
+Berarti kita buat file `RootReducer` sejajar dengan `index.js`, isi kodenya adalah sebagai berikut:
+
+```js
+import { goalsReducer } from "./Goal/GoalReducer.js";
+import { todosReducer } from "./Todo/TodoReducer.js";
+
+function rootReducer(state = {}, action = {}) {
+  return {
+    todos: todosReducer(state.todos, action),
+    goals: goalsReducer(state.goals, action),
+  };
+}
+
+export { rootReducer };
+```
+
+Kemudian pada `index.js` menjadi berikut:
+
+```js
+import {
+  addGoalActionCreator,
+  deleteGoalActionCreator,
+} from "./Goal/GoalAction.js";
+import { rootReducer } from "./RootReducer.js";
+import { createStore } from "./Store.js";
+import {
+  addTodoActionCreator,
+  removeTodoActionCreator,
+  toggleTodoActionCreator,
+} from "./Todo/TodoAction.js";
+
+// consume
+const store = createStore(rootReducer);
+
+// getting the state
+store.getState();
+
+// subscribe state changed
+store.subscribe(() => {
+  console.log("state changed!", store.getState());
+});
+
+// Todo
+store.dispatch(
+  addTodoActionCreator({
+    id: 1,
+    name: "Learn React",
+  })
+);
+
+store.dispatch(
+  addTodoActionCreator({
+    id: 2,
+    name: "Learn Redux",
+  })
+);
+
+store.dispatch(
+  addTodoActionCreator({
+    id: 3,
+    name: "Learn JavaScript",
+  })
+);
+
+// menghapus todo dengan id 3
+store.dispatch(removeTodoActionCreator(3));
+
+// mengubah Learn React menjadi complete
+store.dispatch(toggleTodoActionCreator(1));
+
+// Goal
+store.dispatch(
+  addGoalActionCreator({
+    id: 1,
+    text: "Get a Doctorate",
+  })
+);
+
+store.dispatch(
+  addGoalActionCreator({
+    id: 2,
+    text: "Be an Entrepreneur",
+  })
+);
+
+store.dispatch(deleteGoalActionCreator(1));
+```
+
+Jalankan diterminal, hasilnya akan seperti berikut:
+
+```bash
+npm start
+
+state changed! {
+  todos: [ { id: 1, name: 'Learn React', complete: false } ],
+  goals: []
+}
+state changed! {
+  todos: [
+    { id: 1, name: 'Learn React', complete: false },
+    { id: 2, name: 'Learn Redux', complete: false }
+  ],
+  goals: []
+}
+state changed! {
+  todos: [
+    { id: 1, name: 'Learn React', complete: false },
+    { id: 2, name: 'Learn Redux', complete: false },
+    { id: 3, name: 'Learn JavaScript', complete: false }
+  ],
+  goals: []
+}
+state changed! {
+  todos: [
+    { id: 1, name: 'Learn React', complete: false },
+    { id: 2, name: 'Learn Redux', complete: false }
+  ],
+  goals: []
+}
+state changed! {
+  todos: [
+    { id: 1, name: 'Learn React', complete: true },
+    { id: 2, name: 'Learn Redux', complete: false }
+  ],
+  goals: []
+}
+state changed! {
+  todos: [
+    { id: 1, name: 'Learn React', complete: true },
+    { id: 2, name: 'Learn Redux', complete: false }
+  ],
+  goals: [ { id: 1, text: 'Get a Doctorate' } ]
+}
+state changed! {
+  todos: [
+    { id: 1, name: 'Learn React', complete: true },
+    { id: 2, name: 'Learn Redux', complete: false }
+  ],
+  goals: [
+    { id: 1, text: 'Get a Doctorate' },
+    { id: 2, text: 'Be an Entrepreneur' }
+  ]
+}
+state changed! {
+  todos: [
+    { id: 1, name: 'Learn React', complete: true },
+    { id: 2, name: 'Learn Redux', complete: false }
+  ],
+  goals: [ { id: 2, text: 'Be an Entrepreneur' } ]
+}
+```

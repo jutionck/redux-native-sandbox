@@ -1,13 +1,17 @@
 import {
+  addGoalActionCreator,
+  deleteGoalActionCreator,
+} from "./Goal/GoalAction.js";
+import { rootReducer } from "./RootReducer.js";
+import { createStore } from "./Store.js";
+import {
   addTodoActionCreator,
   removeTodoActionCreator,
   toggleTodoActionCreator,
-} from "./Action.js";
-import { createStore } from "./CreateStore.js";
-import { todosReducer } from "./Reducer.js";
+} from "./Todo/TodoAction.js";
 
 // consume
-const store = createStore(todosReducer);
+const store = createStore(rootReducer);
 
 // getting the state
 store.getState();
@@ -17,6 +21,7 @@ store.subscribe(() => {
   console.log("state changed!", store.getState());
 });
 
+// Todo
 store.dispatch(
   addTodoActionCreator({
     id: 1,
@@ -43,3 +48,20 @@ store.dispatch(removeTodoActionCreator(3));
 
 // mengubah Learn React menjadi complete
 store.dispatch(toggleTodoActionCreator(1));
+
+// Goal
+store.dispatch(
+  addGoalActionCreator({
+    id: 1,
+    text: "Get a Doctorate",
+  })
+);
+
+store.dispatch(
+  addGoalActionCreator({
+    id: 2,
+    text: "Be an Entrepreneur",
+  })
+);
+
+store.dispatch(deleteGoalActionCreator(1));
