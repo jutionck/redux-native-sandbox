@@ -1,13 +1,4 @@
-function goalsReducer(goals = [], action = {}) {
-  if (action.type === "ADD_GOAL") {
-    return [...goals, action.payload];
-  }
+import { goalsSlice } from "./GoalSlice.js";
 
-  if (action.type === "DELETE_GOAL") {
-    return goals.filter((goal) => goal.id !== action.payload.id);
-  }
-
-  return goals;
-}
-
-export { goalsReducer };
+const GoalsReducer = goalsSlice.reducer;
+export default GoalsReducer;

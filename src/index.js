@@ -1,19 +1,23 @@
 import pkg from "@reduxjs/toolkit";
 const { configureStore } = pkg;
-import {
-  addGoalActionCreator,
-  deleteGoalActionCreator,
-} from "./Goal/GoalAction.js";
-import { rootReducer } from "./RootReducer.js";
+import TodosReducer from "./Todo/TodoReducer.js";
+import GoalsReducer from "./Goal/GoalReducer.js";
 import {
   addTodoActionCreator,
   removeTodoActionCreator,
   toggleTodoActionCreator,
-} from "./Todo/TodoAction.js";
+} from "./Todo/TodoSlice.js";
+import {
+  addGoalActionCreator,
+  deleteGoalActionCreator,
+} from "./Goal/GoalSlice.js";
 
 // consume
 const store = configureStore({
-  reducer: rootReducer,
+  reducer: {
+    todos: TodosReducer,
+    goals: GoalsReducer,
+  },
 });
 
 // getting the state
@@ -47,10 +51,10 @@ store.dispatch(
 );
 
 // menghapus todo dengan id 3
-store.dispatch(removeTodoActionCreator(3));
+store.dispatch(removeTodoActionCreator({ id: 3 }));
 
 // mengubah Learn React menjadi complete
-store.dispatch(toggleTodoActionCreator(1));
+store.dispatch(toggleTodoActionCreator({ id: 1 }));
 
 // Goal
 store.dispatch(
@@ -67,4 +71,5 @@ store.dispatch(
   })
 );
 
-store.dispatch(deleteGoalActionCreator(1));
+// menghapus goal dengan id 1
+store.dispatch(deleteGoalActionCreator({ id: 1 }));
